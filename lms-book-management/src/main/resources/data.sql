@@ -1,0 +1,2 @@
+INSERT INTO lms_book_t (bookid, isbn, title, author, copies) VALUES (1, '978-90-274-3964-2', 'Microservices', 'Sam Newman', 1);
+INSERT INTO lms_book_registry_t (bookregistryid, bookid, userid, borrowdate, isreturn) VALUES (1, 1, 1, PARSEDATETIME('12/03/2024','dd/MM/yyyy'), false);

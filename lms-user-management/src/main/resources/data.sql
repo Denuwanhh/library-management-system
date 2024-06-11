@@ -1,0 +1,1 @@
+INSERT INTO lms_user_t (userid, name, email) VALUES (1, 'Denuwan', 'denuwan123@gmail.com');
