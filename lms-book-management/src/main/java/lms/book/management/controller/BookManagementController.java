@@ -24,7 +24,7 @@ public class BookManagementController {
     @Autowired
     private BookManagementService bookManagementService;
 
-    @Operation(summary = "Get book by passing book ID", description = "This method provide book object belongs to book ID")
+    @Operation(summary = "Get book by passing book ID", description = "This method provide book object belongs to book ID.")
     @GetMapping("/{book-id}")
     public ResponseEntity<Book> getBookByBookId(@PathVariable("book-id") int bookId) {
         ResponseEntity<Book> responseEntity = null;
@@ -38,7 +38,7 @@ public class BookManagementController {
         return responseEntity;
     }
 
-    @Operation(summary = "Create new book", description = "This method facilitate to create new book with validation")
+    @Operation(summary = "Create new book", description = "This method facilitate to create new book with validation.")
     @PostMapping()
     public ResponseEntity<List<Book>> createNewBook(@RequestBody @Valid BookDTO bookRequest) {
         ResponseEntity<List<Book>> responseEntity = null;

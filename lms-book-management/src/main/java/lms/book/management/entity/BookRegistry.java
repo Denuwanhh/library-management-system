@@ -3,6 +3,7 @@ package lms.book.management.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import java.util.Date;
 
@@ -19,6 +20,9 @@ public class BookRegistry {
     private Date borrowDate;
 
     private boolean isReturn;
+
+    @Transient
+    private User user;
 
     public int getBookRegistryID() {
         return bookRegistryID;
@@ -58,5 +62,13 @@ public class BookRegistry {
 
     public void setReturn(boolean aReturn) {
         isReturn = aReturn;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

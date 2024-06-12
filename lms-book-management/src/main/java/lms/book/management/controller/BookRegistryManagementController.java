@@ -27,12 +27,7 @@ public class BookRegistryManagementController {
     @Autowired
     private BookManagementService bookManagementService;
 
-    @GetMapping
-    public User getUser(){
-        return bookManagementService.getUserByUserId(10);
-    }
-
-    @Operation(summary = "Get registry record by passing registry-id", description = "This method provide registry object belongs to registry-id")
+    @Operation(summary = "Get registry record by passing registry-id", description = "This method provide registry object belongs to registry-id.")
     @GetMapping("/{registry-id}")
     public ResponseEntity<BookRegistry> getBookByBookRegistryID(@PathVariable("registry-id") int bookRegistryID) {
         ResponseEntity<BookRegistry> responseEntity = null;
@@ -46,7 +41,7 @@ public class BookRegistryManagementController {
         return responseEntity;
     }
 
-    @Operation(summary = "Create new registry record", description = "This method facilitate to create new registry record with validation")
+    @Operation(summary = "Create new registry record", description = "This method facilitate to create new registry record with validation.")
     @PostMapping()
     public ResponseEntity<BookRegistry> createNewBookRegistry(@RequestBody BookRegistry bookRegistry) {
         ResponseEntity<BookRegistry> responseEntity = null;
