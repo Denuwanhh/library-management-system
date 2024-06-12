@@ -11,25 +11,24 @@ This project is designed to manage a library system with two main services: user
 You can spin up three servers by following the steps below.
 
 1. Spin up Eureka Discovery Server
-   
-```
-cd lms-eureka-server
-mvn clean install spring-boot:run
-```
+   ```
+   cd lms-eureka-server
+   mvn clean install spring-boot:run
+   ```
 
 2. Spin up LMS User Management
-   
-```
-cd lms-user-management
-mvn clean install spring-boot:run
-```
+   ```
+   cd lms-user-management
+   mvn clean install spring-boot:run
+   ```
 
 3. Spin up LMS Book Management
-   
-```
-cd lms-book-management
-mvn clean install spring-boot:run
-```
+
+   Make sure to spin up LMS Eureka & LMS User Management services before this step. Otherwise, the API integration test will fail.
+   ```
+   cd lms-book-management
+   mvn clean install spring-boot:run
+   ```
 
 ## API Documentation
 
