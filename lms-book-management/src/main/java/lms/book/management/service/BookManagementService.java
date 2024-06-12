@@ -23,7 +23,7 @@ public class BookManagementService {
     private BookRepository bookRepository;
 
     @Autowired
-    private RestTemplate restTemplate;
+    private ExternalService externalService;
 
     @Autowired
     private BookRegistryRepository bookRegistryRepository;
@@ -70,7 +70,7 @@ public class BookManagementService {
     public BookRegistry createNewBookRegistry(BookRegistry bookRegistry) {
         BookRegistry newBookRegistry = null;
 
-        User user = getUserByUserId(bookRegistry.getUserID());
+        User user = externalService.getUserByUserId(bookRegistry.getUserID());
         Optional<Book> book = bookRepository.findById(bookRegistry.getBookID());
 
         if(user != null && book.isPresent()){
@@ -89,40 +89,13 @@ public class BookManagementService {
                 bookRegistry.setReturn(false);
                 newBookRegistry = bookRegistryRepository.save(bookRegistry);
             }else {
-                throw new LMSResourceNotFoundException("Not book available.");
+                throw new LMSResourceNotFoundException("Book is not available.");
             }
         }else {
             throw new LMSBadRequestException("Invalid User or Book.");
         }
 
         return newBookRegistry;
-    }
-
-    /**
-     * This method responsible to return User by calling LMS-USER-MANAGEMENT service
-     * @param userId
-     * @return User object
-     */
-    @CircuitBreaker(name = "lms-user-service", fallbackMethod = "getDefaultUser")
-    public User getUserByUserId(int userId){
-        User user = null;
-        try {
-            ResponseEntity<User> response = restTemplate.exchange("http://LMS-USER-MANAGEMENT/user-management/users/" + userId, HttpMethod.GET, null, User.class);
-            user = response.getBody();
-        }catch (HttpClientErrorException ex){
-            if(ex.getStatusCode() != HttpStatus.NOT_FOUND){
-                throw ex;
-            }
-        }
-        return user;
-    }
-
-    /**
-     * Provide default user for Circuit Breaker
-     * @return User
-     */
-    public User getDefaultUser(int userId, IllegalStateException e){
-        return new User(userId, "N/A", "N/A", UserStatus.ACTIVE);
     }
 
     /**
@@ -133,7 +106,7 @@ public class BookManagementService {
     public BookRegistry getBookByBookRegistryID(int bookRegistryID) {
         return bookRegistryRepository.findById(bookRegistryID)
                 .map(br -> {
-                    br.setUser(getUserByUserId(br.getUserID()));
+                    br.setUser(externalService.getUserByUserId(br.getUserID()));
                     return br;
                 })
                 .orElseThrow(() -> new LMSResourceNotFoundException("Book Registry not found with id " + bookRegistryID));
