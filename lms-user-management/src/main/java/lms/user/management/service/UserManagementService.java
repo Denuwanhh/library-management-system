@@ -19,12 +19,21 @@ public class UserManagementService {
     @Autowired
     private UserRepository userRepository;
 
-
+    /**
+     * This method responsible for return user belongs to given user ID
+     * @param userId
+     * @return User object, if not available throw an exception
+     */
     @Cacheable(value="user", key="#userId")
     public User getUserByUserId(int userId) {
         return userRepository.findById(userId).orElseThrow(() -> new LMSResourceNotFoundException("User not found with id " + userId));
     }
 
+    /**
+     * This method responsible for create new user. Validate the user ID & email already exist or not.
+     * @param userRequest
+     * @return User object
+     */
     public User createNewUser(UserDTO userRequest) {
 
         if(userRepository.findByEmail(userRequest.getEmail()).size() > 0 || userRepository.findById(userRequest.getUserID()).isPresent()){
