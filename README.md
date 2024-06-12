@@ -24,8 +24,8 @@ graph TD
     EUREKA --> USER
     EUREKA --> BOOK
 
-    USER --> USER_DB
-    BOOK --> BOOK_DB
+    USER <--> USER_DB
+    BOOK <--> BOOK_DB
 ```
 
 
@@ -72,7 +72,7 @@ Documentations are aviable in below mentioned links.
 |Database          |Used a relational database since Book & User data can be managed structured manner and that are related.          |           
 |Unit Test          |Integration & Unit tests are available in the application. Used Junit & Mokito frameworks.
 |Logs|Used slf4j for logs action.|
-|Exception|Use `GlobalExceptionHandler` and customize exceptions to handle specific exceptions. All the exceptions are logged with HTTP status code, message & timestamp|
+|Exception|Used `GlobalExceptionHandler` and customize exceptions to handle specific exceptions. All the exceptions are logged with HTTP status code, message & timestamp|
 |Validation|Validate the domain object using `spring-boot-starter-validation`|
 |Documentation|Used Swagger, open API documentation. Documentations are available in below mentioned links pattern; ```{Host}:{Port}/swagger-ui/index.html#/```|
 |Resiliency|Used circuit breaker pattern to maintain the resiliency of the application|
