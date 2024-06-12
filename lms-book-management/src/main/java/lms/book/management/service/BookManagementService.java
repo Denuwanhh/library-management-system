@@ -103,7 +103,7 @@ public class BookManagementService {
      * @param userId
      * @return User object
      */
-    @CircuitBreaker(name = "DEFAULT-USER", fallbackMethod = "getDefaultUser")
+    @CircuitBreaker(name = "lms-user-service", fallbackMethod = "getDefaultUser")
     public User getUserByUserId(int userId){
         User user = null;
         try {
@@ -121,8 +121,8 @@ public class BookManagementService {
      * Provide default user for Circuit Breaker
      * @return User
      */
-    public User getDefaultUser(){
-        return new User(-1, "Admin", "admin@lms.com", UserStatus.ACTIVE);
+    public User getDefaultUser(int userId, IllegalStateException e){
+        return new User(userId, "N/A", "N/A", UserStatus.ACTIVE);
     }
 
     /**
@@ -131,6 +131,11 @@ public class BookManagementService {
      * @return BookRegistry object
      */
     public BookRegistry getBookByBookRegistryID(int bookRegistryID) {
-        return bookRegistryRepository.findById(bookRegistryID).orElseThrow(() -> new LMSResourceNotFoundException("Book Registry not found with id " + bookRegistryID));
+        return bookRegistryRepository.findById(bookRegistryID)
+                .map(br -> {
+                    br.setUser(getUserByUserId(br.getUserID()));
+                    return br;
+                })
+                .orElseThrow(() -> new LMSResourceNotFoundException("Book Registry not found with id " + bookRegistryID));
     }
 }
