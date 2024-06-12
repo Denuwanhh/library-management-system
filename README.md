@@ -39,13 +39,13 @@ You can spin up three servers by following the steps below.
    mvn clean install spring-boot:run
    ```
 
-2. Spin up LMS User Management
+2. Spin up LMS User Management Service
    ```
    cd lms-user-management
    mvn clean install spring-boot:run
    ```
 
-3. Spin up LMS Book Management
+3. Spin up LMS Book Management Service
 
    Make sure to spin up LMS Eureka & LMS User Management services before this step. Otherwise, the API integration test will fail.
    ```
