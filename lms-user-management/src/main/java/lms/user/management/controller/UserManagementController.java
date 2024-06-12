@@ -37,7 +37,7 @@ public class UserManagementController {
         return responseEntity;
     }
 
-    @Operation(summary = "Create new user", description = "This method facilitate to create new user")
+    @Operation(summary = "Create new user", description = "This method facilitate to create new user.")
     @PostMapping()
     public ResponseEntity<User> createNewUser(@RequestBody @Valid UserDTO userRequest) {
         ResponseEntity<User> responseEntity = null;
@@ -51,7 +51,7 @@ public class UserManagementController {
         return responseEntity;
     }
 
-    @Operation(summary = "Update user", description = "This method facilitate to update user data")
+    @Operation(summary = "Update user", description = "This method facilitate to update user data.")
     @PatchMapping("/{user-id}")
     public ResponseEntity<User> updateUserDetails(@PathVariable("user-id") int userId, @RequestBody User user) {
         ResponseEntity<User> responseEntity = null;
