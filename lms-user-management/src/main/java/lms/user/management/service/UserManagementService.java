@@ -64,6 +64,6 @@ public class UserManagementService {
         excistingUser.setName(user.getName() == null || user.getName().isEmpty() ? excistingUser.getName() : user.getName());
         excistingUser.setUserStatus(user.getUserStatus() == null ? excistingUser.getUserStatus() : user.getUserStatus());
 
-        return excistingUser;
+        return userRepository.save(excistingUser);
     }
 }
