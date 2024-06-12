@@ -24,7 +24,7 @@ You can spin up three servers by following the steps below.
 
 3. Spin up LMS Book Management
 
-   Make sure to spin up LMS Eureka & LMS User Management services before this step.
+   Make sure to spin up LMS Eureka & LMS User Management services before this step. Otherwise, the API integration test will fail.
    ```
    cd lms-book-management
    mvn clean install spring-boot:run
