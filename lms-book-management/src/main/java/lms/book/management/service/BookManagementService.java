@@ -28,10 +28,21 @@ public class BookManagementService {
     @Autowired
     private BookRegistryRepository bookRegistryRepository;
 
+    /**
+     * This method responsible for provide book entry related to the book id
+     * @param bookId
+     * @return Book if not available then throw Exception
+     */
     public Book getBookByBookId(int bookId) {
         return bookRepository.findById(bookId).orElseThrow(() -> new LMSResourceNotFoundException("Book not found with id " + bookId));
     }
 
+    /**
+     * This method responsible for create new book entry. Book ID validation conduct.
+     * And if same book available with same ISBN, then increase the number of copies
+     * @param bookRequest
+     * @return List<Book>
+     */
     public List<Book> createNewBook(BookDTO bookRequest) {
 
         if(bookRepository.findById(bookRequest.getBookId()).isPresent()){
@@ -50,6 +61,12 @@ public class BookManagementService {
         return bookList;
     }
 
+    /**
+     * This method responsible for create new book registry record. First check the book & user is valid.
+     * And then check user already have this book or not. After that check we have enough copies available or not.
+     * @param bookRegistry
+     * @return BookRegistry object
+     */
     public BookRegistry createNewBookRegistry(BookRegistry bookRegistry) {
         BookRegistry newBookRegistry = null;
 
@@ -67,13 +84,12 @@ public class BookManagementService {
                         throw new LMSBadRequestException("This user already have this book");
                     });
 
-
             if(book.get().getCopies() - bookRegistryList.size() > 0) {
                 bookRegistry.setBorrowDate(new Date());
                 bookRegistry.setReturn(false);
                 newBookRegistry = bookRegistryRepository.save(bookRegistry);
             }else {
-                throw new LMSResourceNotFoundException("Not boot available.");
+                throw new LMSResourceNotFoundException("Not book available.");
             }
         }else {
             throw new LMSBadRequestException("Invalid User or Book.");
@@ -81,6 +97,12 @@ public class BookManagementService {
 
         return newBookRegistry;
     }
+
+    /**
+     * This method responsible to return User by calling LMS-USER-MANAGEMENT service
+     * @param userId
+     * @return User object
+     */
     @CircuitBreaker(name = "DEFAULT-USER", fallbackMethod = "getDefaultUser")
     public User getUserByUserId(int userId){
         User user = null;
@@ -95,10 +117,19 @@ public class BookManagementService {
         return user;
     }
 
+    /**
+     * Provide default user for Circuit Breaker
+     * @return User
+     */
     public User getDefaultUser(){
         return new User(-1, "Admin", "admin@lms.com", UserStatus.ACTIVE);
     }
 
+    /**
+     * This method responsible to return book registry entry related to ID.
+     * @param bookRegistryID
+     * @return BookRegistry object
+     */
     public BookRegistry getBookByBookRegistryID(int bookRegistryID) {
         return bookRegistryRepository.findById(bookRegistryID).orElseThrow(() -> new LMSResourceNotFoundException("Book Registry not found with id " + bookRegistryID));
     }
