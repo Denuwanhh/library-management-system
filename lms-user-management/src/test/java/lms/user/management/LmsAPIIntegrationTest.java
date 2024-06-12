@@ -150,4 +150,24 @@ public class LmsAPIIntegrationTest {
                 createURLWithPort() + "/user-management/users" , HttpMethod.POST, entity, User.class);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
+
+    @Test
+    @Sql(statements = "INSERT INTO lms_user_t (userid, name, email) VALUES (2, 'Denuwan', 'denuwan@gmail.com')", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(statements = "DELETE FROM lms_user_t WHERE userid=2", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void when_Pass_Valid_User_And_ID_Should_Update_User() throws JsonProcessingException {
+
+        User user = new User();
+        user.setName("Kamal");
+        user.setEmail("kamal@gmail.com");
+
+        HttpEntity<String> entity = new HttpEntity<>(objectMapper.writeValueAsString(user), headers);
+        ResponseEntity<User> response = restTemplate.exchange(
+                createURLWithPort() + "/user-management/users/2", HttpMethod.PATCH, entity, new ParameterizedTypeReference<User>(){});
+
+        User UpdateUser = response.getBody();
+        assert UpdateUser != null;
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Kamal", user.getName());
+        assertEquals("kamal@gmail.com", user.getEmail());
+    }
 }

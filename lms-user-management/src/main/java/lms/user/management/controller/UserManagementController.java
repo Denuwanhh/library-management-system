@@ -50,4 +50,18 @@ public class UserManagementController {
         }
         return responseEntity;
     }
+
+    @Operation(summary = "Update user", description = "This method facilitate to update user data")
+    @PatchMapping("/{user-id}")
+    public ResponseEntity<User> updateUserDetails(@PathVariable("user-id") int userId, @RequestBody User user) {
+        ResponseEntity<User> responseEntity = null;
+        try{
+            responseEntity = new ResponseEntity<>(userManagementService.updateUserDetails(userId, user), HttpStatus.OK);
+            LOGGER.info(String.join(" | ","PATCH", "user-management/users", user.toString()), responseEntity);
+        }catch (LMSBadRequestException ex){
+            LOGGER.error(String.join(" | ", "PATCH", "user-management/users", user.toString()), ex);
+            throw ex;
+        }
+        return responseEntity;
+    }
 }

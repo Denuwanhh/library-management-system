@@ -7,6 +7,7 @@ import lms.user.management.entity.UserStatus;
 import lms.user.management.exception.LMSBadRequestException;
 import lms.user.management.exception.LMSResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,11 @@ public class UserManagementService {
      */
     @Cacheable(value="user", key="#userId")
     public User getUserByUserId(int userId) {
+//        try {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
         return userRepository.findById(userId).orElseThrow(() -> new LMSResourceNotFoundException("User not found with id " + userId));
     }
 
@@ -47,5 +53,22 @@ public class UserManagementService {
         user.setUserStatus(UserStatus.ACTIVE);
 
         return userRepository.save(user);
+    }
+
+    /**
+     * This method use to modify user object
+     * @param userId
+     * @param user
+     * @return User object, or throw an error
+     */
+    @CachePut(value="user", key="#userId")
+    public User updateUserDetails(int userId, User user) {
+        User excistingUser = userRepository.findById(userId).orElseThrow(() -> new LMSBadRequestException("User not found with id " + userId));
+
+        excistingUser.setEmail(user.getEmail() == null || user.getEmail().isEmpty() ? excistingUser.getEmail() : user.getEmail());
+        excistingUser.setName(user.getName() == null || user.getName().isEmpty() ? excistingUser.getName() : user.getName());
+        excistingUser.setUserStatus(user.getUserStatus() == null ? excistingUser.getUserStatus() : user.getUserStatus());
+
+        return excistingUser;
     }
 }
