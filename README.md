@@ -6,6 +6,29 @@ This project is designed to manage a library system with two main services: user
 - Java 17 or Higher Version
 - Maven
 
+## High-Level Architecture Diagram
+
+```mermaid
+graph TD
+    subgraph Services
+        EUREKA[lms-eureka-server:8761]
+        USER[lms-user-management:8080]
+        BOOK[lms-book-management:8081]
+    end
+
+    subgraph Databases
+        USER_DB[(lms_user_db: H2 Database)]
+        BOOK_DB[(lms_book_db: H2 Database)]
+    end
+
+    EUREKA --> USER
+    EUREKA --> BOOK
+
+    USER --> USER_DB
+    BOOK --> BOOK_DB
+```
+
+
 ## How to Run
 
 You can spin up three servers by following the steps below.
@@ -38,28 +61,6 @@ Documentations are aviable in below mentioned links.
 |----------------|-------------------------------|
 |LMS User Management|http://localhost:8080/swagger-ui/index.html#/|
 |LMS Book Management|http://localhost:8081/swagger-ui/index.html#/|
-
-## High-Level Architecture Diagram
-
-```mermaid
-graph TD
-    subgraph Services
-        EUREKA[lms-eureka-server:8761]
-        USER[lms-user-management:8080]
-        BOOK[lms-book-management:8081]
-    end
-
-    subgraph Databases
-        USER_DB[(lms_user_db: H2 Database)]
-        BOOK_DB[(lms_book_db: H2 Database)]
-    end
-
-    EUREKA --> USER
-    EUREKA --> BOOK
-
-    USER --> USER_DB
-    BOOK --> BOOK_DB
-```
 
 
 ## Non Functional Requirements
