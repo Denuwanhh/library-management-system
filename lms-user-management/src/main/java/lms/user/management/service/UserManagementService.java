@@ -27,11 +27,6 @@ public class UserManagementService {
      */
     @Cacheable(value="user", key="#userId")
     public User getUserByUserId(int userId) {
-//        try {
-//            Thread.sleep(10000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
         return userRepository.findById(userId).orElseThrow(() -> new LMSResourceNotFoundException("User not found with id " + userId));
     }
 
