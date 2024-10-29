@@ -5,6 +5,8 @@ import lms.user.management.entity.User;
 import lms.user.management.entity.UserRepository;
 import lms.user.management.service.UserManagementService;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,6 +51,8 @@ public class LmsAPIIntegrationTest {
     }
 
     @Test
+    @Order(1)
+    @DisplayName("When User Pass Valid ID System Should Return User")
     @Sql(statements = "INSERT INTO lms_user_t (userid, name, email) VALUES (2, 'Denuwan', 'denuwan@gmail.com')", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(statements = "DELETE FROM lms_user_t WHERE userid=2", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void when_Pass_Valid_ID_Should_Return_User() {
@@ -64,6 +68,8 @@ public class LmsAPIIntegrationTest {
     }
 
     @Test
+    @Order(2)
+    @DisplayName("When Pass Invalid ID Should Return Not Found")
     public void when_Pass_Invalid_ID_Should_Return_Not_Found() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
@@ -74,6 +80,8 @@ public class LmsAPIIntegrationTest {
     }
 
     @Test
+    @Order(3)
+    @DisplayName("When Pass Invalid Value Should Return Bad Request")
     public void when_Pass_Invalid_Value_Should_Return_Bad_Request() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 

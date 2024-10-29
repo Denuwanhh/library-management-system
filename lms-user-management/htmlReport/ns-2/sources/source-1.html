@@ -1,0 +1,170 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UserManagementController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">lms.user.management.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: UserManagementController (lms.user.management.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserManagementController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.5%
+  </span>
+  <span class="absValue">
+    (23/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package lms.user.management.controller;
+&nbsp;
+&nbsp;import io.swagger.v3.oas.annotations.Operation;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;import lms.user.management.entity.User;
+&nbsp;import lms.user.management.entity.UserDTO;
+&nbsp;import lms.user.management.exception.LMSBadRequestException;
+&nbsp;import lms.user.management.exception.LMSResourceNotFoundException;
+&nbsp;import lms.user.management.service.UserManagementService;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(value = &quot;user-management/users&quot;)
+<b class="fc">&nbsp;public class UserManagementController {</b>
+&nbsp;
+<b class="fc">&nbsp;    final Logger LOGGER = LoggerFactory.getLogger(UserManagementController.class);</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private UserManagementService userManagementService;
+&nbsp;
+&nbsp;    @Operation(summary = &quot;Get User by passing User ID&quot;, description = &quot;This method provide user details based on user ID.&quot;)
+&nbsp;    @GetMapping(&quot;/{user-id}&quot;)
+&nbsp;    public ResponseEntity&lt;User&gt; getUserByUserId(@PathVariable(&quot;user-id&quot;) int userId) {
+<b class="fc">&nbsp;        ResponseEntity&lt;User&gt; responseEntity = null;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            responseEntity = ResponseEntity.ok(userManagementService.getUserByUserId(userId));</b>
+<b class="fc">&nbsp;            LOGGER.info(String.join(&quot; | &quot;,&quot;GET&quot;, &quot;user-management/users&quot;, String.valueOf(userId)), responseEntity);</b>
+<b class="fc">&nbsp;        }catch (LMSResourceNotFoundException ex){</b>
+<b class="fc">&nbsp;            LOGGER.error(String.join(&quot; | &quot;, &quot;GET&quot;, &quot;user-management/users&quot;, String.valueOf(userId)), ex);</b>
+<b class="fc">&nbsp;            throw ex;</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return responseEntity;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Operation(summary = &quot;Create new user&quot;, description = &quot;This method facilitate to create new user.&quot;)
+&nbsp;    @PostMapping()
+&nbsp;    public ResponseEntity&lt;User&gt; createNewUser(@RequestBody @Valid UserDTO userRequest) {
+<b class="fc">&nbsp;        ResponseEntity&lt;User&gt; responseEntity = null;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            responseEntity = new ResponseEntity&lt;&gt;(userManagementService.createNewUser(userRequest), HttpStatus.CREATED);</b>
+<b class="fc">&nbsp;            LOGGER.info(String.join(&quot; | &quot;,&quot;POST&quot;, &quot;user-management/users&quot;, userRequest.toString()), responseEntity);</b>
+<b class="fc">&nbsp;        }catch (LMSBadRequestException ex){</b>
+<b class="fc">&nbsp;            LOGGER.error(String.join(&quot; | &quot;, &quot;POST&quot;, &quot;user-management/users&quot;, userRequest.toString()), ex);</b>
+<b class="fc">&nbsp;            throw ex;</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return responseEntity;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Operation(summary = &quot;Update user&quot;, description = &quot;This method facilitate to update user data.&quot;)
+&nbsp;    @PatchMapping(&quot;/{user-id}&quot;)
+&nbsp;    public ResponseEntity&lt;User&gt; updateUserDetails(@PathVariable(&quot;user-id&quot;) int userId, @RequestBody User user) {
+<b class="fc">&nbsp;        ResponseEntity&lt;User&gt; responseEntity = null;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            responseEntity = new ResponseEntity&lt;&gt;(userManagementService.updateUserDetails(userId, user), HttpStatus.OK);</b>
+<b class="fc">&nbsp;            LOGGER.info(String.join(&quot; | &quot;,&quot;PATCH&quot;, &quot;user-management/users&quot;, user.toString()), responseEntity);</b>
+<b class="nc">&nbsp;        }catch (LMSBadRequestException ex){</b>
+<b class="nc">&nbsp;            LOGGER.error(String.join(&quot; | &quot;, &quot;PATCH&quot;, &quot;user-management/users&quot;, user.toString()), ex);</b>
+<b class="nc">&nbsp;            throw ex;</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return responseEntity;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-28 13:35</div>
+</div>
+</body>
+</html>
