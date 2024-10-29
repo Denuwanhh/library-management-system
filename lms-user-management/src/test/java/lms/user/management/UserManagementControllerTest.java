@@ -3,8 +3,7 @@ package lms.user.management;
 import lms.user.management.controller.UserManagementController;
 import lms.user.management.entity.User;
 import lms.user.management.service.UserManagementService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -50,12 +49,19 @@ public class UserManagementControllerTest {
 
     private User user;
 
+    //Test Fixture
     @BeforeEach
-    public void setTestData(){
+    public void setUp(){
         user = new User();
         user.setUserID(1);
         user.setEmail("denuwan@gmail.com");
         user.setName("Denuwan");
+    }
+
+    //Test Fixture
+    @AfterEach
+    public void tearDown(){
+        user = null;
     }
 
     @Test
